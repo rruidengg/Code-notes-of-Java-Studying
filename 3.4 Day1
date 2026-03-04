@@ -1,16 +1,88 @@
 //704 二分查找
+class Solution {
+    public int search(int[] nums, int target) {
+        int left = 0 ; int right = nums.length - 1;
+        while(left <= right){//左闭右闭
+            int mid = (right - left)/2 + left ; // mid 需要＋left，防溢出
+        
+            int num = nums[mid] ; 
+            if (num == target){
+                return mid ;
+            }else if (num > target){
+                right = mid -1;
+            }else {
+                left = mid + 1;
+            }
+        }
+        return -1;
+    }
+}
 
-
-
-
-
-
+class Solution {
+    public int search(int[] nums, int target) {
+        int left = 0 ; int right = nums.length ;
+        while(left < right){//左闭右开
+            int mid = (right - left)/2 + left ; // mid 需要＋left
+        
+            int num = nums[mid] ; 
+            if (num == target){
+                return mid ;
+            }else if (num > target){
+                right = mid;
+            }else {
+                left = mid + 1;
+            }
+        }
+        return -1;
+    }
+}
+// 左闭右闭、左闭右开影响的是后续mid是否＋-1.
 
 //27 移除元素
-
-
-
-
+class Solution {
+    public int removeElement(int[] nums, int val) {
+       int left = 0 ;//定义新数组左索引是0
+       int N = nums.length;
+       for (int right = 0 ;right < N ; right ++ ){ //right 不要忘记定义数据类型
+       if (nums [right] != val ){
+        nums[left] = nums [right];
+        left ++;
+       } 
+       }     
+     return left;
+    }
+}
 
 
 //977 有序数组的平方
+//我喜欢暴力解法
+class Solution {
+    public int[] sortedSquares(int[] nums) {
+        int [] ans = new int [nums.length];
+        int n = nums.length;
+        for (int i = 0; i < n; i ++){ //为什么i<=n会报错？
+            ans[i] = nums[i] * nums [i];
+        }
+      Arrays.sort(ans);
+        return ans;  
+    }
+}
+
+//我讨厌双指针
+class Solution {
+    public int[] sortedSquares(int[] nums) {
+        int n = nums.length;
+        int[] ans = new int[n];
+        for (int i = 0, j = n - 1, pos = n - 1; i <= j;) {
+            if (nums[i] * nums[i] > nums[j] * nums[j]) {
+                ans[pos] = nums[i] * nums[i];
+                ++i;
+            } else {
+                ans[pos] = nums[j] * nums[j];
+                --j;
+            }
+            --pos;
+        }
+        return ans;
+    }
+}
