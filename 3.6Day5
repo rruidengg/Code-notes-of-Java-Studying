@@ -1,0 +1,79 @@
+//203 移除链表元素
+class Solution {
+    public ListNode removeElements(ListNode head, int val) {
+        if (head == null)  return head;
+        
+        ListNode prehead = new ListNode (-1);//设置虚拟头节点
+        ListNode p = prehead ; //新链表的尾指针
+        while (head != null){
+            if (head.val != val){
+                p.next = head; //把当前节点接到新链表   prehead - ..p- head
+                head = head.next;
+                p = p.next; //指针依次移动
+
+            }else{  
+                head = head.next;
+            }
+            p.next = null;
+        }
+         return prehead.next; //返回新链表
+    }
+}
+
+//707 设计链表 第一次实现输出结果错误，哪里的问题？ 忙了一天好累啊，希望世界再也没有国自然！！ 代码没调试完，少做了两个题，周六补上
+class MyLinkedList {
+    int size;
+    ListNode head;
+
+    public MyLinkedList() {// 初始化 MyLinkedList 对象
+        size = 0;
+        head = new ListNode (0);
+    }
+    
+    public int get(int index) {
+        if (index < 0 || index > size){
+              return -1;
+        }else{
+            ListNode cur = head ;// 从头结点遍历
+            for (int i = 0 ; i <index ; i ++){
+                cur = cur.next; // 找到index
+            }
+            return cur.val;
+        }
+    }
+    public void addAtHead(int val) {
+         addAtIndex(0, val);
+    }
+    
+    public void addAtTail(int val) {
+         addAtIndex(size, val);
+    }
+    
+    public void addAtIndex(int index, int val) {//在index节点前添加val值
+        if (index > size){
+            return;
+        }
+        index = Math.max(0, index);
+        size++;
+        ListNode pred = head;
+        for (int i = 0; i < index; i++) {
+            pred = pred.next;
+        }
+        ListNode toAdd = new ListNode(val);
+        toAdd.next = pred.next;
+        pred.next = toAdd;
+    }
+    
+    public void deleteAtIndex(int index) {
+         if (index < 0 || index >= size) {
+            return;
+        }
+        size--;
+        ListNode pred = head;
+        for (int i = 0; i < index; i++) {
+            pred = pred.next;
+        }
+        pred.next = pred.next.next;
+    }
+  
+}
