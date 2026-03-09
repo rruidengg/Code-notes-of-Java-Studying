@@ -1,1 +1,99 @@
+//242 有效字母异位词
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        if (s.length() != t.length()) {
+            return false;
+        }
+        int[] table = new int[26];
+        for (int i = 0; i < s.length(); i++) {
+            table[s.charAt(i) - 'a']++;
+        }
+        for (int i = 0; i < t.length(); i++) {
+            table[t.charAt(i) - 'a']--;
+            if (table[t.charAt(i) - 'a'] < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+
+// 349. 两个数组的交集 
+
+class Solution {
+    public int[] intersection(int[] nums1, int[] nums2) {
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+        int length1 = nums1.length, length2 = nums2.length;
+        int[] intersection = new int[length1 + length2];
+        int index = 0, index1 = 0, index2 = 0;
+        while (index1 < length1 && index2 < length2) {
+            int num1 = nums1[index1], num2 = nums2[index2];
+            if (num1 == num2) {
+                // 保证加入元素的唯一性
+                if (index == 0 || num1 != intersection[index - 1]) {
+                    intersection[index++] = num1;
+                }
+                index1++;
+                index2++;
+            } else if (num1 < num2) {
+                index1++;
+            } else {
+                index2++;
+            }
+        }
+        return Arrays.copyOfRange(intersection, 0, index);
+    }
+}
+
+
+
+
+
+
+202. 快乐数 
+class Solution {
+
+     public int getNext(int n) {
+        int totalSum = 0;
+        while (n > 0) {
+            int d = n % 10;
+            n = n / 10;
+            totalSum += d * d;
+        }
+        return totalSum;
+    }
+
+    public boolean isHappy(int n) {
+        int slowRunner = n;
+        int fastRunner = getNext(n);
+        while (fastRunner != 1 && slowRunner != fastRunner) {
+            slowRunner = getNext(slowRunner);
+            fastRunner = getNext(getNext(fastRunner));
+        }
+        return fastRunner == 1;
+    }
+}
+
+
+
+
+ 1. 两数之和 
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+       int[] ans = new int[2]; //声明一个大小为2的数组用来保存结果 
+        int n = nums.length;  //用一个变量n保存nums的长度
+        for(int i = 0; i < n; i++){
+             for(int j = i + 1; j < n; j++){
+                if(nums[i] + nums[j] == target){
+                    ans[0] = i;
+                    ans[1] = j;
+                     return ans;
+                }
+             }
+        }
+        return new int[0];//默认返回值
+    }
+}
 
