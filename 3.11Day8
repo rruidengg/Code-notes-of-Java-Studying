@@ -1,1 +1,33 @@
+// 304 反转字符串 双指针法
+class Solution {
+    public void reverseString(char[] s) {
+        int n = s.length; 
+        for(int l = 0, r = n - 1; l< r; l++, r--){ //括号内标点符号要注意
+            char temp = s[l];
+            s[l] = s[r];
+            s[r] = temp;
+        }
+    }
+}
 
+//541 反转字符串2
+class Solution {
+    public String reverseStr(String s, int k) {
+        int n = s.length();
+        char[] arr = s.toCharArray(); // 将字符串变为字符数组
+       for(int i = 0; i<n ; i +=2*k ){
+          reverse(arr, i, Math.min(i + k, n) - 1); //  Math.min():字符小于k时，全部反转  
+        }
+          return new String(arr);
+       } 
+
+    public void reverse(char[] arr, int left, int right) { //304的双指针反转字符串
+        while (left < right) {
+            char temp = arr[left];
+            arr[left] = arr[right];
+            arr[right] = temp;
+            left++;
+            right--;
+        }
+    }
+}
