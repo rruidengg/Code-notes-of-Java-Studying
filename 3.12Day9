@@ -1,0 +1,43 @@
+// 151 反转字符串中的单词
+1）双指针法
+class Solution {
+    public String reverseWords(String s) {
+        List<String> list = new ArrayList<>(); //用于存储提取出的单词
+        int end = s.length()-1;
+        while(end>=0){ // 从最后一个单词开始遍历
+           while(end>=0 && s.charAt(end)==' ') end--; //跳过字符串末尾、单词之间的空格
+           int start = end;
+           while(start>=0 && s.charAt(start)!=' ') start--;
+           if(end!=-1) list.add(s.substring(start+1, end+1)); 
+           end = start;
+       }
+       return String.join(" ", list); //用单个空格连接所有单词，得到反转后的字符串
+       }
+    }
+
+    //55.右旋字符串
+    public class Main {
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        int n = Integer.parseInt(in.nextLine());
+        String s = in.nextLine();
+
+        int len = s.length();  
+        char[] chars = s.toCharArray();
+        reverseString(chars, 0, len - 1);  
+        reverseString(chars, 0, n - 1);  
+        reverseString(chars, n, len - 1);  
+     
+        System.out.println(chars);
+    }
+
+    public static void reverseString(char[] ch, int start, int end) {
+        while (start < end) {
+            ch[start] ^= ch[end];
+            ch[end] ^= ch[start];
+            ch[start] ^= ch[end];
+            start++;
+            end--;
+        }
+    }
+}
