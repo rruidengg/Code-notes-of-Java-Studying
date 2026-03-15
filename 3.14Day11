@@ -1,0 +1,101 @@
+//150 逆波兰表达式
+class Solution {
+    public int evalRPN(String[] tokens) {
+        Deque<Integer> stack = new LinkedList<Integer>();
+        int n = tokens.length;
+        for (int i = 0; i < n; i++) {
+            String token = tokens[i];
+            if (isNumber(token)) {
+                stack.push(Integer.parseInt(token));
+            } else {
+                int num2 = stack.pop();
+                int num1 = stack.pop();
+                switch (token) {
+                    case "+":
+                        stack.push(num1 + num2);
+                        break;
+                    case "-":
+                        stack.push(num1 - num2);
+                        break;
+                    case "*":
+                        stack.push(num1 * num2);
+                        break;
+                    case "/":
+                        stack.push(num1 / num2);
+                        break;
+                    default:
+                }
+            }
+        }
+        return stack.pop();
+    }
+
+    public boolean isNumber(String token) {
+        return !("+".equals(token) || "-".equals(token) || "*".equals(token) || "/".equals(token));
+    }
+}
+
+
+
+
+
+//239滑动窗口最大值
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        int n = nums.length;
+        PriorityQueue<int[]> pq = new PriorityQueue<int[]>(new Comparator<int[]>() {
+            public int compare(int[] pair1, int[] pair2) {
+                return pair1[0] != pair2[0] ? pair2[0] - pair1[0] : pair2[1] - pair1[1];
+            }
+        });
+        for (int i = 0; i < k; ++i) {
+            pq.offer(new int[]{nums[i], i});
+        }
+        int[] ans = new int[n - k + 1];
+        ans[0] = pq.peek()[0];
+        for (int i = k; i < n; ++i) {
+            pq.offer(new int[]{nums[i], i});
+            while (pq.peek()[1] <= i - k) {
+                pq.poll();
+            }
+            ans[i - k + 1] = pq.peek()[0];
+        }
+        return ans;
+    }
+}
+
+
+
+347 前K个高频元素
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        Map<Integer, Integer> occurrences = new HashMap<Integer, Integer>();
+        for (int num : nums) {
+            occurrences.put(num, occurrences.getOrDefault(num, 0) + 1);
+        }
+
+        // int[] 的第一个元素代表数组的值，第二个元素代表了该值出现的次数
+        PriorityQueue<int[]> queue = new PriorityQueue<int[]>(new Comparator<int[]>() {
+            public int compare(int[] m, int[] n) {
+                return m[1] - n[1];
+            }
+        });
+        for (Map.Entry<Integer, Integer> entry : occurrences.entrySet()) {
+            int num = entry.getKey(), count = entry.getValue();
+            if (queue.size() == k) {
+                if (queue.peek()[1] < count) {
+                    queue.poll();
+                    queue.offer(new int[]{num, count});
+                }
+            } else {
+                queue.offer(new int[]{num, count});
+            }
+        }
+        int[] ret = new int[k];
+        for (int i = 0; i < k; ++i) {
+            ret[i] = queue.poll()[0];
+        }
+        return ret;
+    }
+}
+
