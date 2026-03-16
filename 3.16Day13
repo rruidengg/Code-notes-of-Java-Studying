@@ -81,4 +81,15 @@ class Solution {
 加一行反转：Collections.reverse(ret);
 
 
-//
+//119 二叉树右视图
+在102的基础上修改返回值类型：List<Integer> ret = new ArrayList<Integer>();
+输出每层的最后一个遍历（BFS）的数： if (i == currentLevelSize){
+                           ret.add(node.val);
+                          }
+
+// 637二叉树的层平均值
+在102的基础上修改：Double levelSum = 0.0;
+修改：ret.add(levelSum / currentLevelSize);
+
+
+//429 N叉树的层序遍历
