@@ -1,0 +1,44 @@
+//144 二叉树前序递归遍历（简单）
+class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) { 
+        List <Integer> res = new ArrayList<Integer>();//创建一个 ArrayList 用来保存遍历结果。
+        preorder(root, res); // 调用递归函数 preorder() 进行遍历。
+        return res; //返回前序遍历结果列表
+    }
+
+    public void preorder (TreeNode root, List<Integer> res){
+        if(root==null){
+            return;
+        }
+        res.add(root.val);//将当前节点的值加入结果列表。
+        preorder (root.left,res);
+        preorder (root.right,res);
+    }
+}
+
+//144 二叉树前序迭代遍历
+class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List <Integer> res = new ArrayList<Integer>();
+        preorder(root, res);
+        return res;
+    }
+
+    public void preorder (TreeNode root, List<Integer> res){
+        if(root==null){
+            return;
+        }
+        Deque<TreeNode> stack = new LinkedList<>();//创建一个 双端队列 Deque，用作 栈（Stack）--先进后出 。
+        stack.push(root);//把根节点压入栈。
+        while (!stack.isEmpty()) {//只要栈 不为空，就继续遍历。
+            TreeNode temp = stack.poll(); //取出栈顶节点。
+            res.add(temp.val); //把当前节点的值加入结果列表。
+            if (temp.right != null) { //先压入右子节点。
+                stack.push(temp.right);
+            }
+            if (temp.left != null) {
+                stack.push(temp.left);
+            }
+        }
+    }
+}
