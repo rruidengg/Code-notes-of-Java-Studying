@@ -1,0 +1,121 @@
+//110 平衡二叉树
+class Solution {
+     boolean ans = true;
+    public boolean isBalanced(TreeNode root) {
+
+        getdepth(root);
+        return ans;
+    }
+    public int getdepth(TreeNode root) {
+
+       if(root == null)
+       return 0;
+
+       int Ldepth = getdepth(root.left);
+       int Rdepth = getdepth(root.right);
+
+       if (Math.abs(Ldepth-Rdepth) > 1){
+        ans = false;
+       
+       }
+        return Math.max(Ldepth,Rdepth) +1;
+    }
+}
+
+//257 二叉树的所有路径 （不太熟）
+class Solution {
+    /**
+     * 递归法
+     */
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> res = new ArrayList<>();// 存最终的结果
+        if (root == null) {
+            return res;
+        }
+        List<Integer> paths = new ArrayList<>();// 作为结果中的路径
+        traversal(root, paths, res);
+        return res;
+    }
+
+    private void traversal(TreeNode root, List<Integer> paths, List<String> res) {
+        paths.add(root.val);// 前序遍历，中
+        // 遇到叶子结点
+        if (root.left == null && root.right == null) {
+            // 输出
+            StringBuilder sb = new StringBuilder();// StringBuilder用来拼接字符串，速度更快
+            for (int i = 0; i < paths.size() - 1; i++) {
+                sb.append(paths.get(i)).append("->");
+            }
+            sb.append(paths.get(paths.size() - 1));// 记录最后一个节点
+            res.add(sb.toString());// 收集一个路径
+            return;
+        }
+        // 递归和回溯是同时进行，所以要放在同一个花括号里
+        if (root.left != null) { // 左
+            traversal(root.left, paths, res);
+            paths.remove(paths.size() - 1);// 回溯
+        }
+        if (root.right != null) { // 右
+            traversal(root.right, paths, res);
+            paths.remove(paths.size() - 1);// 回溯
+        }
+    }
+}
+
+//404左叶子之和
+class Solution {
+    public int sumOfLeftLeaves(TreeNode root) {
+       if (root == null) return 0;
+       int leftValue = sumOfLeftLeaves(root.left);    // 左
+       int rightValue = sumOfLeftLeaves(root.right);  // 右
+       
+        int midValue = 0;
+        if (root.left != null && root.left.left == null && root.left.right == null) { 
+            midValue = root.left.val; //遇到左叶子节点记录数值
+        }
+        int sum = midValue + leftValue + rightValue;  // 中 
+        return sum;  //左子树左叶子之和加上右子树左叶子之和
+    }
+
+}
+
+// 222 完全二叉树的节点个数
+class Solution {
+    // 通用递归解法
+    public int countNodes(TreeNode root) {
+        if(root == null) {
+            return 0;
+        }
+        return countNodes(root.left) + countNodes(root.right) + 1;
+    }
+}//目前只会简单的方法
+
+
+ class Solution{
+ public int countNodes(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        TreeNode lNode = root, rNode = root;
+        int lDepth = 0, rDepth = 0; // 分别计算左右子树的高度
+
+        while (lNode != null) {
+            lDepth++;
+            lNode = lNode.left;
+        }
+
+        while (rNode != null) {
+            rDepth++;
+            rNode = rNode.right;
+        }
+
+        // 满二叉树
+        if (lDepth == rDepth) {
+            return (1 << lDepth) - 1; // 2^n - 1
+        }
+
+        // 其余情况按普通完全二叉树计算(计算完全二叉树时，又会优化成一个分支走满二叉树计算)
+        return 1 + countNodes(root.left) + countNodes(root.right);
+    }
+ }
