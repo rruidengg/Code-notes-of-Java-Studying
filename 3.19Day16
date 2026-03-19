@@ -1,0 +1,37 @@
+513 找树左下角的值
+class Solution {
+    private int Deepth = -1;
+    private int value  = 0;
+    public int findBottomLeftValue(TreeNode root) {
+        value = root.val;  
+       LeftValue(0, root);
+        return value;
+    }
+     
+    private void LeftValue(int deepth, TreeNode root){
+        if (root == null) return;
+        if (root.left != null)  LeftValue(deepth+1, root.left);
+        if (root.right != null) LeftValue(deepth+1, root.right);
+        if (root.left == null & root.right == null){
+            if (deepth > Deepth)
+            value = root.val;
+            Deepth = deepth;
+        }
+    }
+}
+
+112路经总和1
+//从根节点到当前节点的值之和为 val,是否存在从当前节点的子节点到叶子的路径，满足其路径和为 sum - val。若当前节点就是叶子节点，那么我们直接判断 sum 是否等于 val 即可
+class Solution {
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        if (root == null) return false;
+        if (root.left == null && root.right == null) {
+            return targetSum == root.val;
+        }
+        return hasPathSum(root.left, targetSum - root.val) || hasPathSum(root.right, targetSum - root.val);
+    }
+}
+
+113 路径总和2 找出所有路径 需要用到回溯 后续学
+
+106 从中序与后序遍历序列构造二叉树
