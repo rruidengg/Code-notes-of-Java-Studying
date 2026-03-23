@@ -1,0 +1,48 @@
+//654最大二叉树
+class Solution {
+    public TreeNode constructMaximumBinaryTree(int[] nums) {
+        return constructMaximumBinaryTree1(nums, 0, nums.length);
+    }
+    private TreeNode constructMaximumBinaryTree1(int[] nums, int leftIndex, int rightIndex){
+       if (rightIndex - leftIndex ==0) {
+        return null;}
+        if (rightIndex - leftIndex ==1){
+         return new TreeNode(nums[leftIndex]);}
+
+        int  maxIndex = leftIndex;
+        int maxVal = nums[maxIndex];// 最大值
+        for (int i=leftIndex+1; i< rightIndex; i++){
+            if (maxVal < nums[i] ){
+              maxIndex = i;
+              maxVal = nums[i];
+        }
+    }
+     TreeNode root = new TreeNode(maxVal);
+    root.left = constructMaximumBinaryTree1(nums, leftIndex, maxIndex);
+    root.right = constructMaximumBinaryTree1(nums, maxIndex+1, rightIndex);
+     return root;
+}
+}
+
+
+//617 合并二叉树
+class Solution {
+    public TreeNode mergeTrees(TreeNode root1, TreeNode root2) {
+        if(root1 == null){
+            return root2;
+        }
+        if (root2 == null){
+            return root1;
+        }
+
+    TreeNode root = new TreeNode(root1.val + root2.val);
+    root.left = mergeTrees(root1.left, root2.left);
+    root.right  = mergeTrees(root1.right, root2.right);
+    return root;
+    }
+}
+
+
+//700 二叉搜索树中的搜索
+
+// 98验证二叉搜索树
