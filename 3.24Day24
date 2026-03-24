@@ -1,0 +1,64 @@
+需要仔细再看
+//669修建二叉搜索树
+class Solution {
+    public TreeNode trimBST(TreeNode root, int low, int high) {
+        if (root == null) {
+            return null;
+        }
+        if (root.val < low) {
+            return trimBST(root.right, low, high);
+        }
+        if (root.val > high) {
+            return trimBST(root.left, low, high);
+        }
+        // root在[low,high]范围内
+        root.left = trimBST(root.left, low, high);
+        root.right = trimBST(root.right, low, high);
+        return root;
+    }
+}
+
+
+
+108将有序数组转换为二叉搜索树
+class Solution {
+    public TreeNode sortedArrayToBST(int[] nums) {
+        return sortedArrayToBST(nums, 0, nums.length);
+    }
+    
+    public TreeNode sortedArrayToBST(int[] nums, int left, int right) {
+        if (left >= right) {
+            return null;
+        }
+        if (right - left == 1) {
+            return new TreeNode(nums[left]);
+        }
+        int mid = left + (right - left) / 2;
+        TreeNode root = new TreeNode(nums[mid]);
+        root.left = sortedArrayToBST(nums, left, mid);
+        root.right = sortedArrayToBST(nums, mid + 1, right);
+        return root;
+    }
+}
+
+
+538 把二叉搜索树转换为累加树
+class Solution {
+    int sum;
+    public TreeNode convertBST(TreeNode root) {
+        sum = 0;
+        convertBST1(root);
+        return root;
+    }
+
+    // 按右中左顺序遍历，累加即可
+    public void convertBST1(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        convertBST1(root.right);
+        sum += root.val;
+        root.val = sum;
+        convertBST1(root.left);
+    }
+}
