@@ -1,0 +1,104 @@
+// 39 组合总和
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        Arrays.sort(candidates); // 先进行排序
+        backtracking(res, new ArrayList<>(), candidates, target, 0, 0);
+        return res;
+    }
+
+    public void backtracking(List<List<Integer>> res, List<Integer> path, int[] candidates, int target, int sum, int idx) {
+        // 找到了数字和为 target 的组合
+        if (sum == target) {
+            res.add(new ArrayList<>(path));
+            return;
+        }
+
+        for (int i = idx; i < candidates.length; i++) {
+            // 如果 sum + candidates[i] > target 就终止遍历
+            if (sum + candidates[i] > target) break;
+            path.add(candidates[i]);
+            backtracking(res, path, candidates, target, sum + candidates[i], i);
+            path.remove(path.size() - 1); // 回溯，移除路径 path 最后一个元素
+        }
+    }
+}
+
+
+//40 组合总和Ⅱ 后续需要仔细看 没太仔细敲代码
+class Solution {
+  LinkedList<Integer> path = new LinkedList<>();
+  List<List<Integer>> ans = new ArrayList<>();
+  boolean[] used;
+  int sum = 0;
+
+  public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+    used = new boolean[candidates.length];
+    // 加标志数组，用来辅助判断同层节点是否已经遍历
+    Arrays.fill(used, false);
+    // 为了将重复的数字都放到一起，所以先进行排序
+    Arrays.sort(candidates);
+    backTracking(candidates, target, 0);
+    return ans;
+  }
+
+  private void backTracking(int[] candidates, int target, int startIndex) {
+    if (sum == target) {
+      ans.add(new ArrayList(path));
+    }
+    for (int i = startIndex; i < candidates.length; i++) {
+      if (sum + candidates[i] > target) {
+        break;
+      }
+      // 出现重复节点，同层的第一个节点已经被访问过，所以直接跳过
+      if (i > 0 && candidates[i] == candidates[i - 1] && !used[i - 1]) {
+        continue;
+      }
+      used[i] = true;
+      sum += candidates[i];
+      path.add(candidates[i]);
+      // 每个节点仅能选择一次，所以从下一位开始
+      backTracking(candidates, target, i + 1);
+      used[i] = false;
+      sum -= candidates[i];
+      path.removeLast();
+    }
+  }
+}
+
+//131 分割回文串  明天继续看 没太懂
+
+class Solution {
+    //保持前几题一贯的格式， initialization
+    List<List<String>> res = new ArrayList<>();
+    List<String> cur = new ArrayList<>();
+    public List<List<String>> partition(String s) {
+        backtracking(s, 0, new StringBuilder());
+        return res;
+    }
+    private void backtracking(String s, int start, StringBuilder sb){
+        //因为是起始位置一个一个加的，所以结束时start一定等于s.length,因为进入backtracking时一定末尾也是回文，所以cur是满足条件的
+        if (start == s.length()){
+            //注意创建一个新的copy
+            res.add(new ArrayList<>(cur));
+            return;
+        }
+        //像前两题一样从前往后搜索，如果发现回文，进入backtracking,起始位置后移一位，循环结束照例移除cur的末位
+        for (int i = start; i < s.length(); i++){
+            sb.append(s.charAt(i));
+            if (check(sb)){
+                cur.add(sb.toString());
+                backtracking(s, i + 1, new StringBuilder());
+                cur.remove(cur.size() -1 );
+            }
+        }
+    }
+
+    //helper method, 检查是否是回文
+    private boolean check(StringBuilder sb){
+        for (int i = 0; i < sb.length()/ 2; i++){
+            if (sb.charAt(i) != sb.charAt(sb.length() - 1 - i)){return false;}
+        }
+        return true;
+    }
+}
