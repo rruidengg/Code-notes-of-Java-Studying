@@ -1,0 +1,103 @@
+//77 组合  剪枝法没太理解代码为什么这么改
+class Solution {
+    List<List<Integer>> result = new ArrayList<>();
+       LinkedList<Integer> path = new LinkedList<>();
+    public List<List<Integer>> combine(int n, int k) {   
+       backtracking(n,k,1);
+       return result;
+    }
+    public void backtracking (int n, int k, int startIndex){
+        if (path.size() == k){
+            result.add(new ArrayList(path));
+            return;
+        }
+        for (int i =startIndex; i<=n ; i ++){
+            path.add(i);//从startIndex开始
+            backtracking(n,k,i+1);// 逐渐加入元素
+            path.removeLast();//移除并返回链表中的最后一个元素
+         
+        }
+    }
+}
+
+
+//剪枝优化
+
+class Solution {
+    List<List<Integer>> result = new ArrayList<>();
+       LinkedList<Integer> path = new LinkedList<>();
+    public List<List<Integer>> combine(int n, int k) {   
+       backtracking(n,k,1);
+       return result;
+    }
+    public void backtracking (int n, int k, int startIndex){
+        if (path.size() == k){
+            result.add(new ArrayList(path));
+            return;
+        }
+        for (int i = startIndex; i <= n-(k-path.size())+1; i ++){
+            path.add(i);//从startIndex开始
+            backtracking(n,k,i+1);// 逐渐加入元素
+            path.removeLast();//移除并返回链表中的最后一个元素
+         
+        }
+    }
+}
+// 216 组合总和
+
+class Solution {
+       List<List<Integer>> result = new ArrayList<>();
+       LinkedList<Integer> path = new LinkedList<>();
+       int sum = 0;
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        backtracing(k,n,1);
+        return result;
+    }
+
+    private void backtracing (int k , int n , int StartIndex){
+         if (path.size()==k && sum ==n){
+            result.add(new ArrayList<>(path)); 
+            return ;
+         }
+         for (int i = StartIndex; i<=9; i ++ ){
+            sum +=i;
+            path.add(i);
+            backtracing(k,n,i+1);
+            sum -=i;
+           path.removeLast();
+         }
+    }
+}
+
+
+//17 电话号码的字母组合 不太熟 二刷需要仔细研究
+
+class Solution {
+    List<String> list = new ArrayList<>();
+    public List<String> letterCombinations(String digits) {
+        if (digits == null || digits.length() == 0) {
+            return list;
+        }
+         String[] numString = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+         backTracking(digits, numString, 0);
+        return list;
+    }
+    //每次迭代获取一个字符串，所以会涉及大量的字符串拼接，所以这里选择更为高效的 StringBuilder
+    StringBuilder temp = new StringBuilder();
+     public void backTracking (String digits, String[] numString, int num ){
+        //遍历全部一次记录一次得到的字符串  不太理解
+        if (num == digits.length()) {
+            list.add(temp.toString());
+            return;
+        }
+        //str 表示当前num对应的字符串
+        String str = numString[digits.charAt(num) - '0'];
+        for (int i = 0; i < str.length(); i++) {
+            temp.append(str.charAt(i));
+            //递归，处理下一层
+            backTracking(digits, numString, num + 1);
+            //剔除末尾的继续尝试
+            temp.deleteCharAt(temp.length() - 1);
+     }
+}
+}
