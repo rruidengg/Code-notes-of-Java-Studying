@@ -1,0 +1,63 @@
+//455 分发饼干
+class Solution {
+    //优先考虑饼干，小饼干先喂饱小胃口
+    public int findContentChildren(int[] g, int[] s) {
+        Arrays.sort(g);
+        Arrays.sort(s);
+        int start = 0;
+        int count = 0;
+
+        for (int i = 0; i < s.length && start < g.length; i++) {
+            if (s[i] >= g[start]) {
+                start++;
+                count++;
+            }
+        }
+        return count;
+    }
+}
+
+
+  //376 摆动序列
+  class Solution {
+    public int wiggleMaxLength(int[] nums) {
+        if (nums.length <= 1) {
+            return nums.length;
+        }
+        //当前差值
+        int curDiff = 0;
+        //上一个差值
+        int preDiff = 0;
+        int count = 1;
+        for (int i = 1; i < nums.length; i++) {
+            //得到当前差值
+            curDiff = nums[i] - nums[i - 1];
+            //如果当前差值和上一个差值为一正一负
+            //等于0的情况表示初始时的preDiff
+            if ((curDiff > 0 && preDiff <= 0) || (curDiff < 0 && preDiff >= 0)) {
+                count++;
+                preDiff = curDiff;
+            }
+        }
+        return count;
+    }
+}
+
+//53最大子序和
+class Solution {
+    public int maxSubArray(int[] nums) {
+         if (nums.length == 1){
+            return nums[0];
+         }
+         int sum = Integer.MIN_VALUE;
+        int count = 0;
+        for (int i = 0; i < nums.length; i++){
+            count += nums[i];
+            sum = Math.max(sum, count); // 取区间累计的最大值（相当于不断确定最大子序终止位置）
+            if (count <= 0){
+                count = 0; // 相当于重置最大子序起始位置，因为遇到负数一定是拉低总和
+            }
+        }
+       return sum;
+    }
+}
