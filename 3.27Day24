@@ -1,0 +1,103 @@
+//93 复原IP地址
+class Solution {
+    List<String> result = new ArrayList<>();
+    public List<String> restoreIpAddresses(String s) {
+        //类似剪枝 if (s.length() > 12) return result;
+        backTrack(s, 0, 0);
+        return result;
+    }
+
+    private void backTrack(String s, int startIndex, int pointNum) {
+      if (pointNum == 3) {
+        if (isValid(s,startIndex,s.length()-1)) {
+                result.add(s);
+            }
+            return;
+             }
+
+         for (int i = startIndex; i < s.length(); i++) {
+            if (isValid(s, startIndex, i)) {
+                s = s.substring(0, i + 1) + "." + s.substring(i + 1);    //在str的后⾯插⼊⼀个逗点
+                pointNum++;
+                backTrack(s, i + 2, pointNum);// 插⼊逗点之后下⼀个⼦串的起始位置为i+2
+                pointNum--;// 回溯
+                s = s.substring(0, i + 1) + s.substring(i + 2);// 回溯删掉逗点
+            } else {
+                break;
+            }
+        }
+    }
+    
+
+    private Boolean isValid(String s, int start, int end) {//判断每个字段是否合法
+        if (start > end) {
+            return false;
+        }
+        if (s.charAt(start) == '0' && start != end) { // 0开头的数字不合法
+            return false;
+        }
+        int num = 0;
+        for (int i = start; i <= end; i++) {
+            if (s.charAt(i) > '9' || s.charAt(i) < '0') { // 遇到⾮数字字符不合法
+                return false;
+            }
+            num = num * 10 + (s.charAt(i) - '0');
+            if (num > 255) { // 如果⼤于255了不合法
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
+
+//78 子集
+class Solution {
+    List<List<Integer>> result = new ArrayList<>();// 存放符合条件结果的集合
+    LinkedList<Integer> path = new LinkedList<>();// 用来存放符合条件结果
+    public List<List<Integer>> subsets(int[] nums) {
+        backtracing(nums,0);
+        return result;
+    }
+
+    private void backtracing (int[] nums, int StartIndex){
+        result.add(new ArrayList<>(path));//「遍历这个树的时候，把所有节点都记录下来，就是要求的子集集合」//为什么？
+        if (StartIndex >= nums.length) return;
+        
+        for (int i = StartIndex; i < nums.length; i ++ ){
+            path.add(nums[i]);
+            backtracing(nums, i + 1);
+            path.removeLast();//回溯
+        }
+    }
+}
+
+
+// 90 子集Ⅱ used数组没太懂
+class Solution {
+
+  List<List<Integer>> res = new ArrayList<>();
+  LinkedList<Integer> path = new LinkedList<>();
+  
+  public List<List<Integer>> subsetsWithDup( int[] nums ) {
+    Arrays.sort( nums );
+    subsetsWithDupHelper( nums, 0 );
+    return res;
+  }
+
+
+  private void subsetsWithDupHelper( int[] nums, int start ) {
+    res.add( new ArrayList<>( path ) );
+
+    for ( int i = start; i < nums.length; i++ ) {
+        // 跳过当前树层使用过的、相同的元素
+      if ( i > start && nums[i - 1] == nums[i] ) {
+        continue;
+      }
+      path.add( nums[i] );
+      subsetsWithDupHelper( nums, i + 1 );
+      path.removeLast();
+    }
+  }
+
+}
