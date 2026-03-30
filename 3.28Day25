@@ -1,0 +1,96 @@
+//491 递增子序列
+class Solution {
+    List<List<Integer>> result = new ArrayList<>();
+    List<Integer> path = new ArrayList<>();
+    public List<List<Integer>> findSubsequences(int[] nums) {
+        backTracking(nums, 0);
+        return result;
+    }
+    private void backTracking(int[] nums, int startIndex){
+        if(path.size() >= 2)
+                result.add(new ArrayList<>(path));            
+        HashSet<Integer> hs = new HashSet<>();
+        for(int i = startIndex; i < nums.length; i++){
+            if(!path.isEmpty() && path.get(path.size() -1 ) > nums[i] || hs.contains(nums[i]))
+                continue;
+            hs.add(nums[i]);
+            path.add(nums[i]);
+            backTracking(nums, i + 1);
+            path.remove(path.size() - 1);
+        }
+    }
+}
+
+
+//46全排列
+class Solution {
+
+    List<List<Integer>> result = new ArrayList<>();// 存放符合条件结果的集合
+    LinkedList<Integer> path = new LinkedList<>();// 用来存放符合条件结果
+    boolean[] used;
+    public List<List<Integer>> permute(int[] nums) {
+        if (nums.length == 0){
+            return result;
+        }
+        used = new boolean[nums.length];
+        permuteHelper(nums);
+        return result;
+    }
+
+    private void permuteHelper(int[] nums){
+        if (path.size() == nums.length){
+            result.add(new ArrayList<>(path));
+            return;
+        }
+        for (int i = 0; i < nums.length; i++){
+            if (used[i]){
+                continue;
+            }
+            used[i] = true;
+            path.add(nums[i]);
+            permuteHelper(nums);
+            path.removeLast();
+            used[i] = false;
+        }
+    }
+}
+
+
+//47 全排列Ⅱ
+class Solution {
+    //存放结果
+    List<List<Integer>> result = new ArrayList<>();
+    //暂存结果
+    List<Integer> path = new ArrayList<>();
+
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        boolean[] used = new boolean[nums.length];
+        Arrays.fill(used, false);
+        Arrays.sort(nums);
+        backTrack(nums, used);
+        return result;
+    }
+
+    private void backTrack(int[] nums, boolean[] used) {
+        if (path.size() == nums.length) {
+            result.add(new ArrayList<>(path));
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            // used[i - 1] == true，说明同⼀树⽀nums[i - 1]使⽤过
+            // used[i - 1] == false，说明同⼀树层nums[i - 1]使⽤过
+            // 如果同⼀树层nums[i - 1]使⽤过则直接跳过
+            if (i > 0 && nums[i] == nums[i - 1] && used[i - 1] == false) {
+                continue;
+            }
+            //如果同⼀树⽀nums[i]没使⽤过开始处理
+            if (used[i] == false) {
+                used[i] = true;//标记同⼀树⽀nums[i]使⽤过，防止同一树枝重复使用
+                path.add(nums[i]);
+                backTrack(nums, used);
+                path.remove(path.size() - 1);//回溯，说明同⼀树层nums[i]使⽤过，防止下一树层重复
+                used[i] = false;//回溯
+            }
+        }
+    }
+}
