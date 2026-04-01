@@ -1,0 +1,89 @@
+// 134 加油站
+class Solution {
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int curSum = 0;
+        int totalSum = 0;
+        int index = 0;
+        for (int i = 0; i < gas.length; i++) {
+            curSum += gas[i] - cost[i];
+            totalSum += gas[i] - cost[i];
+            if (curSum < 0) {
+                index = (i + 1) % gas.length ; 
+                curSum = 0;
+            }
+        }
+        if (totalSum < 0) return -1;
+        return index;
+    }
+}
+
+//135 分发糖果 有点难理解
+class Solution {
+    public int candy(int[] ratings) {
+        int len = ratings.length;
+        int[] candyVec = new int[len];
+        candyVec[0] = 1;
+        for (int i = 1; i < len; i++) { //从左向右遍历
+            candyVec[i] = (ratings[i] > ratings[i - 1]) ? candyVec[i - 1] + 1 : 1;
+        }
+
+        for (int i = len - 2; i >= 0; i--) { // 从右向左遍历
+            if (ratings[i] > ratings[i + 1]) {
+                candyVec[i] = Math.max(candyVec[i], candyVec[i + 1] + 1);
+            }
+        }
+
+        int ans = 0;
+        for (int num : candyVec) {
+            ans += num;
+        }
+        return ans;
+    }
+}
+
+
+
+//860 柠檬水找零
+class Solution {
+    public boolean lemonadeChange(int[] bills) {
+        if (bills[0] == 10 || bills[0] == 20) return false;       
+        int count_5 = 0;
+        int count_10 = 0;
+        for (int i = 0; i < bills.length; i ++){
+            if (bills[i] == 5){
+                count_5 ++;
+            }else if (bills[i] == 10) {
+                count_5--;
+                count_10++;
+            }else if (bills[i] == 20) {
+                if (count_10 > 0) {
+                    count_10--;
+                    count_5--;
+                } else {
+                    count_5 -= 3;
+                }
+            }
+      if (count_5 < 0 || count_10 < 0) return false;    
+       }
+        return true;
+}
+}
+
+//406根据身高重建队列 和分发糖果一样有点难以理解 为什么他的实现代码这么少行 完全想不到
+class Solution {
+    public int[][] reconstructQueue(int[][] people) {
+        // 身高从大到小排（身高相同k小的站前面）
+        Arrays.sort(people, (a, b) -> {
+            if (a[0] == b[0]) return a[1] - b[1];   // a - b 是升序排列，故在a[0] == b[0]的狀況下，會根據k值升序排列
+            return b[0] - a[0];   //b - a 是降序排列，在a[0] != b[0]，的狀況會根據h值降序排列
+        });
+
+        LinkedList<int[]> que = new LinkedList<>();
+
+        for (int[] p : people) {
+            que.add(p[1],p);   //Linkedlist.add(index, value)，會將value插入到指定index裡。
+        }
+
+        return que.toArray(new int[people.length][]);
+    }
+}
