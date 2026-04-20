@@ -1,0 +1,74 @@
+739.每日温度
+class Solution {
+    public int[] dailyTemperatures(int[] temperatures) {
+
+        int lens=temperatures.length;
+        int []res=new int[lens];
+        Deque<Integer> stack=new LinkedList<>();
+        stack.push(0);
+        for(int i=1;i<lens;i++){
+
+            if(temperatures[i]<=temperatures[stack.peek()]){
+                stack.push(i);
+            }else{
+                while(!stack.isEmpty()&&temperatures[i]>temperatures[stack.peek()]){
+                    res[stack.peek()]=i-stack.peek();
+                    stack.pop();
+                }
+                stack.push(i);
+            }
+        }
+
+        return  res;
+    }
+}
+
+496.下一个更大元素
+class Solution {
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums1.length; i++) {
+            map.put(nums1[i], i);
+        }
+
+        int[] res = new int[nums1.length];
+        Stack<Integer> stack = new Stack<>();
+        Arrays.fill(res, -1);
+
+        for (int i = 0; i < nums2.length; i++) {
+            while (!stack.isEmpty() && nums2[stack.peek()] < nums2[i]) {
+                int pre = nums2[stack.pop()];
+                if (map.containsKey(pre)) {
+                    res[map.get(pre)] = nums2[i];
+                }
+            }
+            stack.push(i);
+        }
+
+        return res;
+    }
+}
+
+
+503.下一个更大元素Ⅱ 循环数组
+
+class Solution {
+    public int[] nextGreaterElements(int[] nums) {
+        //边界判断
+        if(nums == null || nums.length <= 1) {
+            return new int[]{-1};
+        }
+        int size = nums.length;
+        int[] result = new int[size];//存放结果
+        Arrays.fill(result,-1);//默认全部初始化为-1
+        Stack<Integer> st= new Stack<>();//栈中存放的是nums中的元素下标
+        for(int i = 0; i < 2*size; i++) {
+            while(!st.empty() && nums[i % size] > nums[st.peek()]) {
+                result[st.peek()] = nums[i % size];//更新result
+                st.pop();//弹出栈顶
+            }
+            st.push(i % size);
+        }
+        return result;
+    }
+}
